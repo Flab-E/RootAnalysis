@@ -1,0 +1,116 @@
+<HTML>
+<HEAD>
+  <TITLE>EXT3FS Keyword Search Test #1</TITLE>
+</HEAD>
+
+
+<BODY BGCOLOR="#FFFFCC">
+<CENTER>
+  <H2>EXT3FS Keyword Search #1</H2>
+
+  <H3>Digital Forensics Tool Testing Image (#4)</H3>
+
+  <A HREF="http://dftt.sf.net">
+  http://dftt.sf.net</a>
+
+</CENTER>
+
+<H3>Introduction</H3>
+<P>
+This test image is an EXT3FS file system with several ASCII strings.
+There are only 4 strings to search for, so this one is quite simple
+and short.  It only tests the basic features of EXT3FS.
+
+
+<H3>Download</H3>
+<P>
+This test image is a 'raw' partition image (i.e. 'dd') of an NTFS file
+system.  The file system is 5MB and is compressed to 4MB.  The MD5
+of the image is <TT>30e7f792cc853e34e17335b243605d3a</TT>.  This image
+is released under the <A
+HREF="http://www.gnu.org/licenses/licenses.html#GPL"> GPL</A>, so
+anyone can use it.
+
+<UL>
+  <LI><A HREF="./4-ext3-kw-1.zip">zip</A>
+</UL>
+
+
+<H3>Search Terms</H3>
+<P>
+These should all be performed case sensitive and not as regular
+expressions.
+
+<P>
+<TABLE WIDTH=100% BORDER=1>
+<TR>
+  <TH>Num</TH><TH>String</TH><TH>Sector - Offset</TH><TH>Fragment - Offset</TH><TH>File</TH><TH>Note</TH>
+</TR>
+
+<TR>
+  <TD>1</TD><TD>first</TD><TD>330 - 100</TD><TD>165 - 100</TD><TD><TT>/, /., /.., /lost+found/..</TT></TD><TD>File Name</TD>
+</TR>
+
+<TR>
+  <TD>&nbsp;</TD><TD>first</TD><TD>392 - 100</TD><TD>196 - 100</TD><TD>inode #8</TD><TD>Journal entry</TD>
+</TR>
+
+<TR>
+  <TD>&nbsp;</TD><TD>first</TD><TD>432 - 100</TD><TD>216 - 100</TD><TD>inode #8</TD><TD>Journal entry</TD>
+</TR>
+
+<TR>
+  <TD>&nbsp;</TD><TD>first</TD><TD>2416 - 181</TD><TD>1208 - 181</TD><TD><TT>/file1</TT></TD><TD>Allocated file</TD>
+</TR>
+
+<TR>
+  <TD>2</TD><TD>second</TD><TD>2419 - 509</TD><TD>1209 - 1021</TD><TD><TT>/file2</TT></TD><TD>Fragmented String</TD>
+</TR>
+
+<TR>
+  <TD>3</TD><TD>third</TD><TD>2420 - 80</TD><TD>1210 - 80</TD><TD><TT>/file3</TT> (deleted)</TD><TD>Unallocated file</TD>
+</TR>
+
+<TR>
+  <TD>4</TD><TD>slacker</TD><TD>2417 - 179</TD><TD>1208 - 691</TD><TD><TT>/file1</TT></TD><TD>Slack space of <TT>file1</TT></TD>
+</TR>
+
+</TABLE>
+
+
+
+<H3>Author</H3>
+Brian Carrier (carrier at cerias.purdue.edu) created the test cases
+and the test image.  
+This test was released on November 24, 2003.
+
+
+<H3>Disclaimers</H3>
+<P>
+Neither Purdue University or CERIAS sponsor this work.
+
+<P>
+These tests are not a complete test suite.  These were the first
+ones that I thought of and no formal theory was put into their
+design.
+
+
+<P>
+Passing these tests provides no guarantees about a tool.  Always
+use additional test cases (and email them to me so we can all
+benefit!).
+
+
+<P>
+<HR>
+<TABLE WIDTH=100% BORDER=0>
+<TR WIDTH=100%>
+  <TD WIDTH=50% ALIGN=LEFT>Brian Carrier [<TT>carrier AT cerias.purdue.edu</TT>]
+</TD>
+  <TD WIDTH=50% ALIGN=RIGHT>Last Updated: Nov 23, 2003</TD>
+</TR>
+</TABLE>
+
+
+</BODY>
+</HTML>
