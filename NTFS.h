@@ -18,50 +18,44 @@ int ntfs_analyse(unsigned char* buff) {
     memcpy(spc, buff+13, 2);
     printf("MFT Cluster Number: "); printf(_GRN); printf("%lld\n", *mft_cls_no); printf(_RST);
 
-    long long mft0_addr = (*bps * *spc * *mft_cls_no);
-    long long i30_mft = mft0_addr + (5 * 1024);
-
-    printf("\nOffset for first MFT entry calculated: "); printf(_GRN); printf("%lld\n", mft0_addr); printf(_RST);
+    long long mft_addr = (*bps * *spc * *mft_cls_no);
+    long long i30_mft = mft_addr + (5 * 1024);
+    printf("\nOffset for first MFT entry calculated: "); printf(_GRN); printf("%lld\n", mft_addr); printf(_RST);
     printf("Offset for root dir i30 mft entry: "); printf(_GRN); printf("%lld\n", i30_mft); printf(_RST);
 
-    // each mft entry has structure:
-    // 56 bytes => header
-    // file name attribute has the signature 0x00000030 or 30.00.00.0 (endianess)
-    // search for the file name attribute
-    int sec = i30_mft + 56;             // skipping throught header
-    int found=0;
+    printf(_BLU);
+    printf("\n\n[*] File Names of files in root directory: ");
+    printf(_RST);
+    int completed = 0;
 
-    while(sec < (i30_mft+1024) && !found) {
-        // read size of current section
-        int size = buff[sec+4];
-        if(size == 0) break;
-        sec += size;
-        if(buff[sec]==0x80 && buff[sec+1]==0x00 && buff[sec+2]==0x00 && buff[sec+3]==0x00){
-            found = 1;
-        }
-    }
 
-    if(!found){
-        printf(_RED); printf("[-] No Data Attr signature found\n"); printf(_RST);
-        printf("[*] Trying to locate non resident attributes\n");
-
-        int fnd_attr = 0;
-        sec = i30_mft+56;
-        while(sec < (i30_mft+1024) && !fnd_attr){
-            printf("attribute signature found: %x\n", buff[sec]);
+    int mft0_addr = mft_addr;
+    while(mft0_addr < mft_addr+75000) {
+        int sec = mft0_addr+56;
+        while(sec < (mft0_addr+1024)) {
+            // read size of current section
             int size = buff[sec+4];
-            if(size==0) break;
+            if(size == 0) break;
             sec += size;
-            if(buff[sec]==0x20 && buff[sec+1]==0 && buff[sec+2]==0 && buff[sec+3]==0) fnd_attr = 1;
+            if(buff[sec]==0x30 && buff[sec+1]==0x00 && buff[sec+2]==0x00 && buff[sec+3]==0x00){
+                int size = buff[sec+4];
+                char *filename = (char*) malloc(sizeof(char)*(size-88));
+                memcpy(filename, (char*)buff+sec+88, size-88);
+
+                int ind = 0;
+                printf(_GRN);
+                while(ind < size) {
+                    if(filename[ind] != 0) {
+                        printf("%c", filename[ind]);
+                    }
+                    ind++;
+                }
+                printf(_RST);
+                printf("\n");
+            }
         }
-
-        printf("%d\n", fnd_attr);
-    } else {
-        printf("[+] found Data Attr signature at offset "); printf(_GRN); printf("%x\n", sec); printf(_RST);
-    }
-
-    if(!found) {
-        return -1;
+        mft0_addr = mft0_addr + 1024;
+        completed++;
     }
 
     return 0;
