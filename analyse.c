@@ -44,8 +44,8 @@ int main(int argc, char *argv[]){
 
     printf("[*] Reading OEM, Bytes per sector and sectors per cluster\n");
     unsigned char *oem = (unsigned char*) malloc(sizeof(char)*8);
-    uint16_t *spc = (uint16_t*) malloc(sizeof(uint16_t));               // sectors per cluster
-    uint16_t *bps = (uint16_t*) malloc(sizeof(uint16_t));               // bytes per sector
+    u_int16_t *spc = (u_int16_t*) malloc(sizeof(u_int16_t));               // sectors per cluster
+    u_int16_t *bps = (u_int16_t*) malloc(sizeof(u_int16_t));               // bytes per sector
     
     memcpy(oem, buff+3, 8 );
     memcpy(bps, buff+11, 2);
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]){
             printf(_RST);
         }
     }
-    else if(strcmp((char *)oem, "mkdosfs\x00") == 0) {
+    else if(strcmp((char *)oem, "MSDOS5.0") == 0) {
         int fat32_handler = 0;
         fat32_handler = fat32_analyse(buff);
 

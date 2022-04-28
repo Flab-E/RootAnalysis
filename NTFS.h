@@ -9,8 +9,8 @@
 # define _RST "\033[0m"
 
 int ntfs_analyse(unsigned char* buff) {
-    uint16_t *spc = (uint16_t*) malloc(sizeof(uint16_t));               // sectors per cluster
-    uint16_t *bps = (uint16_t*) malloc(sizeof(uint16_t));               // bytes per sector
+    u_int16_t *spc = (u_int16_t*) malloc(sizeof(u_int16_t));               // sectors per cluster
+    u_int16_t *bps = (u_int16_t*) malloc(sizeof(u_int16_t));               // bytes per sector
     long long *mft_cls_no = (long long*) malloc(sizeof(long long));     // cluster number of 1st mft entry
 
     memcpy(mft_cls_no, buff+48, 8);
