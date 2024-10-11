@@ -1,11 +1,10 @@
 import os
-import json
 import argparse
 import hashlib 
 from colorama import Fore, Style
 
 class BootInfo():
-  def __init__(self, file, offsets):
+  def __init__(self, file, offsets=None):
     self.file = file
     self.offsets = offsets
     self.info = {}
@@ -49,27 +48,20 @@ class BootInfo():
     with open(self.file, 'rb') as f:
       self.raw = f.read()
 
-  def printMBRPartitions(self, partition):
+  def printPartition(self, partition):
     flags = partition[0]
     startCHS = int.from_bytes(partition[1:4], 'little')
-    partitionType = format(partition[4], '02x')
+    partitionType = partition[4]
     endCHS = int.from_bytes(partition[5:8], 'little')
     lbastart = int.from_bytes(partition[8:12], 'little')
     numberOfSectors = int.from_bytes(partition[12:16], 'little')
 
-    startSector = lbastart * 512
-    partitionSize = numberOfSectors * 512
-
-    partitionTypeJson = json.loads(open('PartitionTypes.json').read())
-    # get element where 'hex' == partitionType
-    partitionName = [x['desc'] for x in partitionTypeJson if x['hex'] == partitionType]
-    if len(partitionName) == 0:
-      partitionName = "Unknown"
-    else:
-      partitionName = partitionName[0]
-
-    print(f'{Fore.YELLOW}({partitionType}), {Fore.GREEN}{partitionName}, {Fore.BLUE}{startSector}, {Fore.RED}{partitionSize}{Style.RESET_ALL}')
-    # print()
+    print(f'\t{"Flags:":<24} {Fore.BLUE}{flags:<16}{Fore.GREEN}{hex(flags)}{Style.RESET_ALL}')
+    print(f'\t{"Start CHS:":<24} {Fore.BLUE}{startCHS:<16}{Fore.GREEN}{hex(startCHS)}{Style.RESET_ALL}')
+    print(f'\t{"Partition Type:":<24} {Fore.BLUE}{partitionType:<16}{Fore.GREEN}{hex(partitionType)}{Style.RESET_ALL}')
+    print(f'\t{"End CHS:":<24} {Fore.BLUE}{endCHS:<16}{Fore.GREEN}{hex(endCHS)}{Style.RESET_ALL}')
+    print(f'\t{"LBA Start:":<24} {Fore.BLUE}{lbastart:<16}{Fore.GREEN}{hex(lbastart)}{Style.RESET_ALL}')
+    print(f'\t{"Number of Sectors:":<24} {Fore.BLUE}{numberOfSectors:<16}{Fore.GREEN}{hex(numberOfSectors)}{Style.RESET_ALL}')
 
   def getPartitionScheme(self):
     self.readRaw()
@@ -78,7 +70,7 @@ class BootInfo():
     
     if self.info['signature'] == b'\x55\xaa':
       sig = " ".join([hex(_)[2:] for _ in self.info['signature']])
-      # print(Fore.YELLOW + f'[+] {"MBR Signature found:":<32} {Fore.GREEN}{sig}' + Style.RESET_ALL)
+      print(Fore.YELLOW + f'[+] {"MBR Signature found:":<32} {Fore.GREEN}{sig}' + Style.RESET_ALL)
       
       self.info['partitions'] = []
       for i in range(4):
@@ -86,11 +78,8 @@ class BootInfo():
         self.info['partitions'].append(partition)
       
       for i, partition in enumerate(self.info['partitions']):
-        print(f'Partition {i+1}: ', end='')
-        self.printMBRPartitions(partition)
-
-    else:
-      print(Fore.RED + f'[-] {"MBR Signature not found"}' + Style.RESET_ALL)
+        print(f'Partition {i+1}:')
+        self.printPartition(partition)
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Boot Info')
