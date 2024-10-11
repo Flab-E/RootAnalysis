@@ -5,3 +5,5 @@ ntfs/
 fat32/
 ntfs/
 *.dd
+*.raw.txt
+*.txt
