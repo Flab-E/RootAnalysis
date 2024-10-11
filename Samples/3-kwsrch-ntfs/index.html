@@ -1,0 +1,138 @@
+<HTML>
+<HEAD>
+  <TITLE>NTFS Keyword Search Test #1</TITLE>
+</HEAD>
+
+
+<BODY BGCOLOR="#FFFFCC">
+<CENTER>
+  <H2>NTFS Keyword Search #1</H2>
+
+  <H3>Digital Forensics Tool Testing Image (#3)</H3>
+
+  <A HREF="http://dftt.sf.net">
+  http://dftt.sf.net</a>
+
+</CENTER>
+
+<H3>Introduction</H3>
+<P>
+This test image is an NTFS file system with several ASCII strings.
+The goal of this test is less ambitious than the <A HREF="../test2/index.html">previous FAT keyword search test</A> and
+only tests the unique features of NTFS.  It only has 10 test cases
+and there will likely be another test image in the future that
+tests additional features of NTFS.  The focus of this test is
+resident versus non-resident file content and multiple data attributes
+(or alternate data streams).
+
+
+<H3>Download</H3>
+<P>
+This test image is a 'raw' partition image (i.e. 'dd') of an NTFS file
+system.  The file system is 8MB and is compressed to 6MB.  The MD5
+of the image is <TT>389e42124eb23c5053ff6596976d6710</TT>.  This image
+is released under the <A
+HREF="http://www.gnu.org/licenses/licenses.html#GPL"> GPL</A>, so
+anyone can use it.
+
+<UL>
+  <LI><A HREF="./3-ntfs-kw-1.zip">zip</A>
+  <LI><A HREF="./3-ntfs-kw-1.tar.gz">tar.gz</A>
+</UL>
+
+
+<H3>Search Terms</H3>
+<P>
+These should all be performed case sensitive and not as regular
+expressions.
+
+<P>
+<TABLE WIDTH=100% BORDER=1>
+<TR>
+  <TH>Num</TH><TH>String</TH><TH>Sector</TH><TH>Offset</TH><TH>File</TH><TH>Note</TH>
+</TR>
+<TR>
+  <TD>1</TD><TD>r-alloc</TD><TD>1342</TD><TD>83</TD><TD>$LogFile</TD><TD>Log File Entry</TD>
+</TR>
+<TR>
+  <TD>&nbsp;</TD><TD>r-alloc</TD><TD>5409</TD><TD>347</TD><TD>file-r-1.dat</TD><TD>Resident allocated file</TD>
+</TR>
+<TR>
+  <TD>2</TD><TD>r-unalloc</TD><TD>1350</TD><TD>92</TD><TD>$LogFile</TD><TD>Log File Entry #1</TD>
+</TR>
+<TR>
+  <TD>&nbsp;</TD><TD>r-unalloc</TD><TD>1915</TD><TD>156</TD><TD>$LogFile</TD><TD>Log File Entry #2</TD>
+</TR>
+<TR>
+  <TD>&nbsp;</TD><TD>r-unalloc</TD><TD>5423</TD><TD>380</TD><TD>file-r-2.dat (deleted)</TD><TD>Resident unallocated file</TD>
+</TR>
+<TR>
+  <TD>3</TD><TD>r-fads</TD><TD>1391</TD><TD>43</TD><TD>$LogFile</TD><TD>Log File Entry</TD>
+</TR>
+<TR>
+  <TD>&nbsp;</TD><TD>r-fads</TD><TD>5414</TD><TD>331</TD><TD>file-r-3.dat:here</TD><TD>Resident alternate data stream in an allocated file</TD>
+</TR>
+<TR>
+  <TD>4</TD><TD>r-dads</TD><TD>1528</TD><TD>258</TD><TD>$LogFile</TD><TD>Log File Entry</TD>
+</TR>
+<TR>
+  <TD>&nbsp;</TD><TD>r-dads</TD><TD>5415</TD><TD>346</TD><TD>dir-r-4:there</TD><TD>Resident alternate data stream in an allocated directory</TD>
+</TR>
+<TR>
+  <TD>5</TD><TD>n-alloc</TD><TD>8050</TD><TD>161</TD><TD>file-n-1.dat</TD><TD>Non-resident allocated file</TD>
+</TR>
+<TR>
+  <TD>6</TD><TD>n-unalloc</TD><TD>8053</TD><TD>86</TD><TD>file-n-2.dat (deleted)</TD><TD>Non-resident unallocated file</TD>
+</TR>
+<TR>
+  <TD>7</TD><TD>n-frag</TD><TD>8059</TD><TD>509</TD><TD>file-n-3.dat</TD><TD>Crosses fragmented clusters in a non-resident allocated file</TD>
+</TR>
+<TR>
+  <TD>8</TD><TD>n-slack</TD><TD>8062</TD><TD>485</TD><TD>file-n-4.dat</TD><TD>Slack space of a non-resident allocated file</TD>
+</TR>
+<TR>
+  <TD>9</TD><TD>n-fads</TD><TD>8067</TD><TD>370</TD><TD>file-n-5.dat:here</TD><TD>Non-resident alternate data stream in an allocated file</TD>
+</TR>
+<TR>
+  <TD>10</TD><TD>n-dads</TD><TD>8068</TD><TD>314</TD><TD>dir-n-6:there</TD><TD>Non-resident alternate data stream in an allocated directory</TD>
+</TR>
+
+</TABLE>
+
+
+
+<H3>Author</H3>
+Brian Carrier (carrier at cerias.purdue.edu) created the test cases
+and the test image.  
+This test was released on October 27, 2003.
+
+
+<H3>Disclaimers</H3>
+<P>
+Neither Purdue University or CERIAS sponsor this work.
+
+<P>
+These tests are not a complete test suite.  These were the first
+ones that I thought of and no formal theory was put into their
+design.
+
+
+<P>
+Passing these tests provides no guarantees about a tool.  Always
+use additional test cases (and email them to me so we can all
+benefit!).
+
+
+<P>
+<HR>
+<TABLE WIDTH=100% BORDER=0>
+<TR WIDTH=100%>
+  <TD WIDTH=50% ALIGN=LEFT>Brian Carrier [<TT>carrier AT cerias.purdue.edu</TT>]
+</TD>
+  <TD WIDTH=50% ALIGN=RIGHT>Last Updated: Oct 27, 2003</TD>
+</TR>
+</TABLE>
+
+
+</BODY>
+</HTML>

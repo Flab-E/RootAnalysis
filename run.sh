@@ -1,1 +1,1 @@
-gcc analyse.c -o test && ./test ntfs/NTFS.img
+gcc analyse.c -o analyse && ./analyse ntfs/NTFS.img
