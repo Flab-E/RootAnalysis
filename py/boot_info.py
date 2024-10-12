@@ -39,13 +39,6 @@ class BootInfo():
     with open(f'SHA512-{fileName}.txt', 'w') as f:
       f.write(sha512.hexdigest())
 
-  def prettyPrint(self, data):
-    for row in range(0, len(data), 16):
-      line = data[row:row+16]
-      hexStr = ' '.join(f'{x:02x}' for x in line)
-      charStr = ''.join(chr(x) if 32 <= x < 127 else '.' for x in line)
-      print(f'{hexStr:<48} {charStr}')
-
   def readRaw(self):
     with open(self.file, 'rb') as f:
       self.raw = f.read()
@@ -95,7 +88,6 @@ class BootInfo():
       print(f'Partition Name: {Fore.BLUE}{partitionName}{Style.RESET_ALL}')
       # print(f'{partitionTypeGUID} {partitionGUID} {firstLBA} {lastLBA} {flags} {partitionName}')
 
-
   def getPartitionScheme(self):
     self.readRaw()
     self.info['bootsector'] = self.raw[:0x200]
@@ -119,7 +111,7 @@ class BootInfo():
     else:
       # print(Fore.RED + f'[-] {"No Protective MBR. Continuing with basic MBR structure"}' + Style.RESET_ALL)
       pass
-    
+
     # Parse MBR partitions
     if self.mbr and not self.gpt:
       self.info['partitions'] = []
@@ -149,6 +141,24 @@ class BootInfo():
       self.info['partitionEntryCRC32'] = int.from_bytes(self.raw[0x258:0x25c], 'little')
 
       self.printGPTPartitions()
+
+    # parse offsets
+    self.parseOffset()
+
+  def parseOffset(self):
+    if not self.offsets:
+      print(Fore.RED + '[-] No offsets provided' + Style.RESET_ALL)
+      return
+    
+    for i, offset in enumerate(self.offsets):
+      byteArray = self.raw[int(offset):int(offset)+16]
+      hexStr = ' '.join(f'{x:02x}' for x in byteArray)
+      charStr = '  '.join(chr(x) if 32 <= x < 127 else '.' for x in byteArray)
+      print(f'Partition Number: {i+1}')
+      disp1 = f'16 bytes of boot record from offset {offset}: '
+      disp2 = f'ASCII: '      
+      print(f'{disp1:<44} {Fore.BLUE}{hexStr}{Style.RESET_ALL}')
+      print(f'{disp2:<44} {Fore.GREEN}{charStr}{Style.RESET_ALL}')
 
 
 if __name__ == '__main__':
