@@ -147,7 +147,7 @@ class BootInfo():
 
   def parseOffset(self):
     if not self.offsets:
-      print(Fore.RED + '[-] No offsets provided' + Style.RESET_ALL)
+      # print(Fore.RED + '[-] No offsets provided' + Style.RESET_ALL)
       return
     
     for i, offset in enumerate(self.offsets):
